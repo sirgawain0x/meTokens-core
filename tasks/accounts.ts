@@ -1,5 +1,4 @@
 import { task } from "hardhat/config";
-import "@nomiclabs/hardhat-waffle";
 
 // follows ETH/BTC's BIP 39 protocol
 // https://iancoleman.io/bip39/

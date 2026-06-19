@@ -1,16 +1,16 @@
 import "hardhat-diamond-abi";
-import "@nomiclabs/hardhat-waffle";
 import * as dotenv from "dotenv";
 import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 import { HardhatUserConfig } from "hardhat/config";
 import "@typechain/hardhat";
 import "@nomiclabs/hardhat-ethers";
+import "@nomiclabs/hardhat-waffle";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
-import "./tasks/index";
 import "@nomiclabs/hardhat-etherscan";
 import "hardhat-abi-exporter";
+import "./tasks/index";
 
 dotenv.config();
 const {
@@ -36,9 +36,12 @@ const INFURA_NETWORKS = [
   "arbitrum-mainnet",
   "arbitrum-rinkeby",
 ];
-const accounts = PRIVATE_KEY
-  ? // Private key overrides mnemonic - leave pkey empty in .env if using mnemonic
-    [`0x${PRIVATE_KEY}`]
+const privateKey = PRIVATE_KEY
+  ? (`0x${PRIVATE_KEY.replace(/^0x/i, "")}` as `0x${string}`)
+  : undefined;
+const accounts = privateKey
+  ? // Private key overrides mnemonic - with or without 0x prefix in .env
+    [privateKey]
   : {
       mnemonic,
       path: "m/44'/60'/0'/0",
@@ -125,6 +128,13 @@ const config: HardhatUserConfig = {
       gas: "auto",
       timeout: 1800000,
       chainId: 1,
+    },
+    base: {
+      url: ALCHEMY_API_KEY
+        ? `https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+        : "https://mainnet.base.org",
+      accounts,
+      chainId: 8453,
     },
     ...networks.reduce((obj: any, entry) => {
       obj[entry] = makeNetwork(entry);

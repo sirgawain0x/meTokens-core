@@ -1,5 +1,4 @@
 import { task } from "hardhat/config";
-import "@nomiclabs/hardhat-waffle";
 
 task("tx", "Prints the detail for the transaction hash")
   .addParam("hash", "The transaction's hash")
