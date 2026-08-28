@@ -154,9 +154,20 @@ const config: HardhatUserConfig = {
     coinmarketcap: `${COINMARKETCAP_API_KEY || ""}`,
   },
   etherscan: {
-    // Your API key for Etherscan
-    // Obtain one at https://etherscan.io/
-    apiKey: `${ETHERSCAN_API_KEY || ""}`,
+    apiKey: {
+      mainnet: ETHERSCAN_API_KEY || "",
+      base: ETHERSCAN_API_KEY || "",
+    },
+    customChains: [
+      {
+        network: "base",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org",
+        },
+      },
+    ],
   },
   paths: {
     sources: "./contracts",
